@@ -1,129 +1,50 @@
-﻿using CamiloAPP.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CamiloAPP.Resx;
+using CamiloAPP.Services;
+using CamiloAPP.Views;
 using Xamarin.Forms;
 
 namespace CamiloAPP.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private string _username;
-        private string _password;
-        private bool _ShowMessage;
-        private string _WelcomeMessage;
-        private Color _messagecolor;
+        private readonly IAccountService _accountService;
 
-        public string username
+        public LoginViewModel(IAccountService accountService)
         {
-            get => _username;
-            set 
-            {
-                if (_username != value)
-                {
-                    _username = value;
-                    OnPropertyChanged();
-                }
-
-            }
-        }
-
-        public string password
-        {
-            get => _password;
-            set
-            {
-                if (_password != value)
-                {
-                    _password = value;
-                    OnPropertyChanged();
-                }
-
-            }
-        }
-
-        public Color messagecolor
-        {
-            get => _messagecolor;
-            set
-            {
-                if (_messagecolor != value)
-                {
-                    _messagecolor = value;
-                    OnPropertyChanged();
-                }
-
-            }
-        }
-
-        public bool ShowMessage
-        {
-            get => _ShowMessage;
-            set
-            {
-                if (_ShowMessage != value)
-                {
-                    _ShowMessage = value;
-                    OnPropertyChanged();
-                }
-
-            }
-        }
-
-        public string WelcomeMessage
-        {
-            get => _WelcomeMessage;
-            set
-            {
-                if (_WelcomeMessage != value)
-                {
-                    _WelcomeMessage = value;
-                    OnPropertyChanged();
-                }
-
-            }
-        }
-        
-
-        public Command LoginCommand { get; }
-
-        public string UserName { get; set; }
-
-
-        public LoginViewModel()
-        {
+            _accountService = accountService;
             LoginCommand = new Command(OnLoginClicked);
         }
 
+
+        private string _username;
+        private string _password;
+
+        public string UserName { get => _username; set => SetProperty(ref _username, value); }
+        public string Password { get => _password; set => SetProperty(ref _password, value); }
+        public Command LoginCommand { get; }
+
+
         private async void OnLoginClicked(object obj)
         {
-            if (ValidateFields())
+            // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
+            if (ValidateFields() && await _accountService.LoginAsync(UserName, Password))
             {
-                if (username == "cbarrera" && password == "cbarrera")
-                {
-                    messagecolor = Color.Green;
-                    WelcomeMessage = "¡Bienvenido! " + username + "!";                    
-                    await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
-                }
+                await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
             }
             else
             {
-                ShowMessage = true;
-                messagecolor = Color.Red;
-                WelcomeMessage = "Usuario o contraseña incorrectos";
+                await Application.Current.MainPage.DisplayAlert(AppResources.LoginPageInvalidLoginTitle,
+                    AppResources.LoginPageInvalidLoginMessage, AppResources.OkText);
             }
         }
-
         private bool ValidateFields()
         {
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-                return true;
-            }
-            else
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
             {
                 return false;
             }
+            return true;
         }
+
     }
 }

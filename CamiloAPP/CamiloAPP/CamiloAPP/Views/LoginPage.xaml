@@ -4,21 +4,20 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:CamiloAPP.ViewModels"
+             xmlns:utility="clr-namespace:CamiloAPP.Utilities"
+             xmlns:resx="clr-namespace:CamiloAPP.Resx"
+             utility:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:LoginViewModel"
+             xmlns:local="clr-namespace:CamiloAPP;assembly=CamiloAPP"
              mc:Ignorable="d"
              x:Class="CamiloAPP.Views.LoginPage"
              Shell.NavBarIsVisible="False">
-    <ContentPage.BindingContext>
-        <viewModels:LoginViewModel/>
-    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-
-            <Entry Text = "{Binding username}" Placeholder="User" Margin="10"/>
-            <Entry Text = "{Binding password}" Placeholder="Password" IsPassword="True" Margin="10"/>
+            <Image Source="{local:ImageResource CamiloAPP.Resources.Images.login.jpg}" WidthRequest="200" HeightRequest="200" />
+            <Entry Text="{Binding UserName}" Placeholder="{Static resx:AppResources.LoginPageUserNameText}" TextColor="Black" />
+            <Entry Text="{Binding Password}" Placeholder="{Static resx:AppResources.LoginPagePasswordText}" IsPassword="True" TextColor="Black" />
             <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
-            <!--<Button Text="Iniciar Sesion" Clicked="OnLoginButtonClicked" Margin="10"/>-->
-            <Label Text = "{Binding WelcomeMessage}" FontSize="Subtitle" TextColor="{Binding messagecolor}" HorizontalOptions="Center" Margin="0,30,0,0" IsVisible="{Binding ShowMessage}"/>
-            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,8 +1,5 @@
-﻿using CamiloAPP.Services;
-using CamiloAPP.Views;
-using System;
+﻿using CamiloAPP;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CamiloAPP
 {
@@ -13,8 +10,8 @@ namespace CamiloAPP
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();
+            Startup.Initialize();
+            MainPage = Startup.Resolve<AppShell>();
         }
 
         protected override void OnStart()

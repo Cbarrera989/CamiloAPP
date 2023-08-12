@@ -1,5 +1,4 @@
-﻿using CamiloAPP.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +9,9 @@ using Xamarin.Forms.Xaml;
 namespace CamiloAPP.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class ClientsPage : ContentPage
     {
-        public LoginPage()
+        public ClientsPage()
         {
             InitializeComponent();
         }
